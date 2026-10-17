@@ -1,0 +1,15 @@
+.git
+.claude
+.venv
+.env
+**/__pycache__
+**/*.pyc
+**/*.egg-info
+.pytest_cache
+backend/.jwt_secret
+backend/*.db
+backend/*.db-*
+backend/tests
+frontend/node_modules
+frontend/dist
+frontend/*.tsbuildinfo

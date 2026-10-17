@@ -1,0 +1,21 @@
+# Render Blueprint — deploys the website (FastAPI + built React app) from the Dockerfile.
+# In Render: New → Blueprint → pick this repository. Render builds the image, generates JWT_SECRET,
+# and mounts a persistent disk at /data for the SQLite database and the poster image cache.
+services:
+  - type: web
+    name: movieswipe
+    runtime: docker
+    plan: starter            # a persistent disk needs a paid instance; free instances lose data on redeploy
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: movieswipe-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: TMDB_API_KEY
+        sync: false          # optional; leave empty to keep the bundled catalog + Wikipedia/TVmaze artwork

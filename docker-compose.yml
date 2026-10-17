@@ -1,0 +1,38 @@
+# MovieSwipe + Postgres 16.
+#   echo "JWT_SECRET=$(python -c 'import secrets; print(secrets.token_urlsafe(48))')" >> .env
+#   docker compose up --build        # then open http://localhost:8000
+# Optional settings (TMDB_API_KEY, ADMIN_TOKEN, ...) are read from .env; see .env.example.
+
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg://movieswipe:${POSTGRES_PASSWORD:-movieswipe}@db:5432/movieswipe
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (a long random string)}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: movieswipe
+      POSTGRES_USER: movieswipe
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-movieswipe}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movieswipe -d movieswipe"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
