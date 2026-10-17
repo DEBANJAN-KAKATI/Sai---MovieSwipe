@@ -160,9 +160,3 @@ Copy `.env.example` to `.env` to configure optional integrations. All settings h
 
 For the in-depth architectural breakdown, recommendation math, WebSocket protocol specs, and phased roadmap, refer to:
 👉 **[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)**
-
----
-
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
